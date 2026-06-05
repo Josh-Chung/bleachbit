@@ -67,31 +67,37 @@ pacman -S --noconfirm \
 pip install --break-system-packages defusedxml
 ```
 
-#### Step 3: Launch BleachBit
+#### Step 3: Clone the repository
 
 ```bash
 # In the MSYS2 MINGW64 terminal
-cd /c/path/to/bleachbit
+git clone https://github.com/bleachbit/bleachbit.git
+cd bleachbit
+```
+
+#### Step 4: Launch BleachBit
+
+```bash
 python bleachbit.py          # GUI mode
 python bleachbit.py --help   # CLI mode
 ```
 
 #### Quick launch (from PowerShell or CMD)
 
-If you prefer not to open the MSYS2 terminal every time, you can launch directly from PowerShell:
+If you prefer not to open the MSYS2 terminal every time, you can launch directly from PowerShell.
+Replace `<username>` with your Windows username and `C:/path/to/bleachbit` with the actual clone path (e.g. `C:/projects/bleachbit`):
 
 ```powershell
-C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd '<bleachbit-source-path>' && python bleachbit.py"
+C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd 'C:/path/to/bleachbit' && python bleachbit.py"
 ```
 
-> Replace `<username>` with your Windows username and `<bleachbit-source-path>` with the BleachBit source directory.
 > `APPDATA` and `LOCALAPPDATA` must be set explicitly because MSYS2 does not inherit these Windows environment variables automatically.
 
 You can also save the command as a `.bat` file for double-click convenience:
 
 ```batch
 @echo off
-C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd '<bleachbit-source-path>' && python bleachbit.py"
+C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd 'C:/path/to/bleachbit' && python bleachbit.py"
 ```
 
 #### Notes
