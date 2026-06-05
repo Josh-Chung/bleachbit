@@ -79,7 +79,7 @@ mkdir -p /c/Users/<username>/projects
 cd /c/Users/<username>/projects
 
 # Clone the repository
-git clone https://github.com/bleachbit/bleachbit.git
+git clone https://github.com/Josh-Chung/bleachbit.git
 cd bleachbit
 ```
 
@@ -123,7 +123,7 @@ C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile &&
 sudo apt install python3-gi gir1.2-gtk-3.0 python3-pip
 
 # Clone and run
-git clone https://github.com/bleachbit/bleachbit.git
+git clone https://github.com/Josh-Chung/bleachbit.git
 cd bleachbit
 pip install -r requirements.txt
 python3 bleachbit.py          # GUI mode
