@@ -112,7 +112,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         return ()
     try:
         dom = defusedxml.minidom.parseString(response.text)
-    except:
+    except Exception:
         logger.exception(
             'The update information does not parse: %s', response.text)
         return ()
