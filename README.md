@@ -20,6 +20,10 @@ For information regarding the command line interface, run:
 
 Read more about [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html).
 
+### Windows 用户：从源码启动 GUI
+
+如果你在 Windows 上希望**直接从源码运行 BleachBit GUI**（无需构建 .exe），请参阅 **[TUTORIAL.md](doc/TUTORIAL.md)**。该教程详细介绍了如何通过 MSYS2 MINGW64 环境配置所有依赖（GTK3、PyGObject 等），并提供一键启动脚本，让你可以像使用安装版一样直接运行源码。
+
 ## Links
 
 * [BleachBit home page](https://www.bleachbit.org)
