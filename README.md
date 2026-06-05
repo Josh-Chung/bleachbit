@@ -20,6 +20,10 @@ For information regarding the command line interface, run:
 
 Read more about [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html).
 
+### Windows: Running the GUI from source
+
+To **run BleachBit GUI directly from source** on Windows without building an `.exe`, see **[TUTORIAL.md](doc/TUTORIAL.md)**. It walks through setting up an MSYS2 MINGW64 environment with all dependencies (GTK3, PyGObject, etc.) and provides one-liner launch scripts so you can run the source tree just like the installed version.
+
 ## Links
 
 * [BleachBit home page](https://www.bleachbit.org)
