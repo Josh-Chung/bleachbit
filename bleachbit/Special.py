@@ -28,7 +28,7 @@ import json
 import logging
 import os
 import sqlite3
-import xml.dom.minidom
+import defusedxml.minidom
 from urllib.parse import quote, urlparse, urlunparse
 
 
@@ -280,7 +280,7 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
-    dom1 = xml.dom.minidom.parse(path)
+    dom1 = defusedxml.minidom.parse(path)
     modified = False
     pathprefix = '/org.openoffice.Office.Histories/Histories/'
     for node in dom1.getElementsByTagName("item"):
@@ -464,7 +464,7 @@ def delete_mozilla_favicons(path):
 
 def delete_ooo_history(path):
     """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
-    dom1 = xml.dom.minidom.parse(path)
+    dom1 = defusedxml.minidom.parse(path)
     changed = False
     for node in dom1.getElementsByTagName("node"):
         if node.hasAttribute("oor:name"):
