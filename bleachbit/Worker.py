@@ -381,5 +381,5 @@ class Worker:
             try:
                 for _dummy in self.clean_operation(operation):
                     yield True
-            except:
+            except Exception:
                 self.print_exception(operation)
