@@ -18,6 +18,12 @@ BleachBit is an open-source system cleaner and privacy tool for Windows, Linux, 
 
 ## 1. Installation
 
+> **About this fork**
+>
+> This repository (`Josh-Chung/bleachbit`) is a personal fork of the upstream BleachBit project. It contains security and code-quality fixes — see the merged PR [#1: Fix XXE vulnerabilities and code quality issues](https://github.com/Josh-Chung/bleachbit/pull/1) — that have **not** been upstreamed.
+>
+> Only the "Running from source" steps below use this fork (via `git clone`). All pre-built installers and packages — the Windows `.exe`, the portable build, and the Linux distro packages — are produced and published by the original project maintainer at https://www.bleachbit.org and the [upstream repository](https://github.com/bleachbit/bleachbit). To benefit from the security fixes in this fork, you must run from source.
+
 ### Windows
 
 Download the installer from: https://www.bleachbit.org/download/windows
