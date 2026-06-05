@@ -69,11 +69,21 @@ pip install --break-system-packages defusedxml
 
 #### Step 3: Clone the repository
 
+In the MSYS2 MINGW64 terminal, first decide **where to put the source tree**. By default the terminal opens in your MSYS2 home directory (`/home/<msys2-user>/`, which lives at `C:\msys64\home\<msys2-user>\` on the Windows filesystem) — that path is awkward to access from File Explorer or other Windows editors, so it's better to clone into a regular Windows location.
+
+MSYS2 maps Windows drives as `/c/`, `/d/`, etc. For example, `C:\Users\<username>\projects\` becomes `/c/Users/<username>/projects/`.
+
 ```bash
-# In the MSYS2 MINGW64 terminal
+# Switch to a convenient Windows directory (create it if needed)
+mkdir -p /c/Users/<username>/projects
+cd /c/Users/<username>/projects
+
+# Clone the repository
 git clone https://github.com/bleachbit/bleachbit.git
 cd bleachbit
 ```
+
+The repository is now at `C:\Users\<username>\projects\bleachbit\` on the Windows filesystem.
 
 #### Step 4: Launch BleachBit
 
