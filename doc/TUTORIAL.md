@@ -1,30 +1,30 @@
-# BleachBit 使用教程
+# BleachBit Tutorial
 
-BleachBit 是一款开源的系统清理与隐私保护工具，支持 Windows、Linux 和 macOS。它可以释放磁盘空间、清除浏览记录、删除临时文件，并安全擦除敏感数据。
-
----
-
-## 目录
-
-1. [安装](#1-安装)
-2. [GUI 图形界面使用](#2-gui-图形界面使用)
-3. [CLI 命令行使用](#3-cli-命令行使用)
-4. [常用清理场景](#4-常用清理场景)
-5. [安全擦除（Shred）](#5-安全擦除shred)
-6. [自定义清理规则（CleanerML）](#6-自定义清理规则cleanerml)
-7. [最佳实践与注意事项](#7-最佳实践与注意事项)
+BleachBit is an open-source system cleaner and privacy tool for Windows, Linux, and macOS. It frees disk space, clears browsing history, removes temporary files, and securely shreds sensitive data.
 
 ---
 
-## 1. 安装
+## Table of Contents
+
+1. [Installation](#1-installation)
+2. [GUI Usage](#2-gui-usage)
+3. [CLI Usage](#3-cli-usage)
+4. [Common Cleaning Scenarios](#4-common-cleaning-scenarios)
+5. [Secure Shredding](#5-secure-shredding)
+6. [Custom Cleaning Rules (CleanerML)](#6-custom-cleaning-rules-cleanerml)
+7. [Best Practices and Caveats](#7-best-practices-and-caveats)
+
+---
+
+## 1. Installation
 
 ### Windows
 
-从官网下载安装包：https://www.bleachbit.org/download/windows
+Download the installer from: https://www.bleachbit.org/download/windows
 
-有两个版本可选：
-- **安装版**（`.exe`）— 推荐大多数用户使用
-- **便携版**（portable）— 无需安装，可放在 U 盘中使用
+Two editions are available:
+- **Installer** (`.exe`) — recommended for most users
+- **Portable** — no installation required, can run from a USB drive
 
 ### Linux
 
@@ -39,20 +39,20 @@ sudo dnf install bleachbit
 sudo pacman -S bleachbit
 ```
 
-### 从源码运行（Windows + MSYS2）
+### Running from source (Windows + MSYS2)
 
-BleachBit 的 GUI 依赖 GTK3，在 Windows 上最简单的运行方式是通过 MSYS2。
+The BleachBit GUI depends on GTK3. On Windows, the simplest way to run from source is via MSYS2.
 
-#### 第一步：安装 MSYS2
+#### Step 1: Install MSYS2
 
-从 https://www.msys2.org 下载安装程序（约 70 MB），安装到默认路径 `C:\msys64`。
+Download the installer (~70 MB) from https://www.msys2.org and install to the default path `C:\msys64`.
 
-#### 第二步：安装 Python + GTK3 + 依赖
+#### Step 2: Install Python + GTK3 + dependencies
 
-打开 **MSYS2 MINGW64** 终端（注意选 MINGW64，不是普通 MSYS2），运行：
+Open the **MSYS2 MINGW64** terminal (make sure you pick MINGW64, not plain MSYS2) and run:
 
 ```bash
-# 安装 Python、GTK3、PyGObject 和核心依赖（约 400 MB）
+# Install Python, GTK3, PyGObject, and core dependencies (~400 MB)
 pacman -S --noconfirm \
     mingw-w64-x86_64-python \
     mingw-w64-x86_64-python-gobject \
@@ -63,70 +63,70 @@ pacman -S --noconfirm \
     mingw-w64-x86_64-python-chardet \
     mingw-w64-x86_64-python-pywin32
 
-# 安装 defusedxml（pacman 中没有预编译包）
+# Install defusedxml (no pre-built pacman package available)
 pip install --break-system-packages defusedxml
 ```
 
-#### 第三步：启动 BleachBit
+#### Step 3: Launch BleachBit
 
 ```bash
-# 在 MSYS2 MINGW64 终端中
+# In the MSYS2 MINGW64 terminal
 cd /c/path/to/bleachbit
-python bleachbit.py          # GUI 模式
-python bleachbit.py --help   # CLI 模式
+python bleachbit.py          # GUI mode
+python bleachbit.py --help   # CLI mode
 ```
 
-#### 快捷启动（从 PowerShell 或 CMD）
+#### Quick launch (from PowerShell or CMD)
 
-如果不想每次都打开 MSYS2 终端，可以直接从 PowerShell 启动：
+If you prefer not to open the MSYS2 terminal every time, you can launch directly from PowerShell:
 
 ```powershell
 C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd '<bleachbit-source-path>' && python bleachbit.py"
 ```
 
-> 将 `<username>` 替换为你的 Windows 用户名，`<bleachbit-source-path>` 替换为 BleachBit 源码路径。
-> `APPDATA` 和 `LOCALAPPDATA` 需要手动设置，因为 MSYS2 环境不会自动继承这些 Windows 环境变量。
+> Replace `<username>` with your Windows username and `<bleachbit-source-path>` with the BleachBit source directory.
+> `APPDATA` and `LOCALAPPDATA` must be set explicitly because MSYS2 does not inherit these Windows environment variables automatically.
 
-也可以保存为 `.bat` 文件方便双击启动：
+You can also save the command as a `.bat` file for double-click convenience:
 
 ```batch
 @echo off
 C:\msys64\usr\bin\bash.exe -lc "export MSYSTEM=MINGW64 && source /etc/profile && export APPDATA='C:/Users/<username>/AppData/Roaming' && export LOCALAPPDATA='C:/Users/<username>/AppData/Local' && cd '<bleachbit-source-path>' && python bleachbit.py"
 ```
 
-#### 注意事项
+#### Notes
 
-- 启动时出现 `intl-8.dll` 警告是正常的（国际化库缺失，不影响功能）
-- 提示 `Missing optional Python packages: plyer` 也是正常的（plyer 仅用于桌面通知）
-- 修改源码后无需重新构建，直接重启即可生效
+- The `intl-8.dll` warning at startup is harmless (missing internationalization library, does not affect functionality)
+- The message `Missing optional Python packages: plyer` is also harmless (plyer is only used for desktop notifications)
+- After editing source code, simply restart — no rebuild needed
 
-### 从源码运行（Linux）
+### Running from source (Linux)
 
 ```bash
 # Ubuntu / Debian
 sudo apt install python3-gi gir1.2-gtk-3.0 python3-pip
 
-# 克隆并运行
+# Clone and run
 git clone https://github.com/bleachbit/bleachbit.git
 cd bleachbit
 pip install -r requirements.txt
-python3 bleachbit.py          # GUI 模式
-python3 bleachbit.py --help   # CLI 模式
+python3 bleachbit.py          # GUI mode
+python3 bleachbit.py --help   # CLI mode
 ```
 
 ---
 
-## 2. GUI 图形界面使用
+## 2. GUI Usage
 
-### 界面布局
+### Interface Layout
 
 ```
 ┌──────────────────────────────────────────────────┐
-│  菜单栏：File / Edit / Help                       │
+│  Menu bar: File / Edit / Help                    │
 ├────────────────┬─────────────────────────────────┤
 │                │                                 │
-│  左侧面板       │  右侧面板                        │
-│  (清理器列表)    │  (操作日志 / 预览结果)             │
+│  Left panel    │  Right panel                    │
+│  (Cleaner list)│  (Action log / Preview results) │
 │                │                                 │
 │  ☑ Firefox     │  Preview:                       │
 │    ☑ Cache     │  Delete 150MB ~/.cache/firefox/  │
@@ -139,74 +139,74 @@ python3 bleachbit.py --help   # CLI 模式
 │    ☑ Tmp       │                                 │
 │                │                                 │
 ├────────────────┴─────────────────────────────────┤
-│  工具栏：[Preview 预览]  [Clean 清理]  [Abort 中止] │
-│  状态栏：Disk space recovered: 152MB               │
+│  Toolbar: [Preview]  [Clean]  [Abort]            │
+│  Status bar: Disk space recovered: 152MB         │
 └──────────────────────────────────────────────────┘
 ```
 
-### 基本操作流程
+### Basic Workflow
 
-**第一步：选择清理项目**
+**Step 1: Select items to clean**
 
-在左侧面板勾选你要清理的内容。清理器按软件分类：
-- **浏览器类**：Firefox、Chrome、Edge、Brave 等的缓存、Cookies、历史
-- **系统类**：临时文件、日志、回收站、剪贴板
-- **应用类**：Office、VLC、Adobe Reader 等的 MRU（最近使用记录）
+Check the items you want to clean in the left panel. Cleaners are grouped by application:
+- **Browsers**: Firefox, Chrome, Edge, Brave, etc. — cache, cookies, history
+- **System**: temporary files, logs, recycle bin, clipboard
+- **Applications**: Office, VLC, Adobe Reader, etc. — MRU (most recently used) lists
 
-**第二步：预览（Preview）**
+**Step 2: Preview**
 
-点击工具栏的 **Preview** 按钮。BleachBit 会扫描但 **不删除任何文件**，在右侧显示将被清理的文件列表和预估释放空间。
+Click the **Preview** button on the toolbar. BleachBit scans but **does not delete anything**. The right panel shows the files that would be cleaned and the estimated space to be freed.
 
-> 💡 **始终先预览再清理！** 确认没有误选重要文件。
+> **Always preview before cleaning!** Make sure nothing important is selected by mistake.
 
-**第三步：清理（Clean）**
+**Step 3: Clean**
 
-确认预览结果后，点击 **Clean** 按钮执行实际清理。
+After reviewing the preview, click the **Clean** button to perform the actual cleanup.
 
-**第四步：查看结果**
+**Step 4: Review results**
 
-清理完成后，底部状态栏显示：
-- `Disk space recovered: XXX MB` — 释放的磁盘空间
-- `Files deleted: XXX` — 删除的文件数
+When cleaning finishes, the status bar shows:
+- `Disk space recovered: XXX MB` — space freed
+- `Files deleted: XXX` — number of files removed
 
-### 偏好设置（Preferences）
+### Preferences
 
-通过菜单 `Edit → Preferences` 打开：
+Open via `Edit → Preferences`:
 
-| 设置项 | 说明 | 建议 |
-|--------|------|------|
-| Overwrite files | 安全覆写文件内容后再删除 | 普通清理关闭，隐私敏感时开启 |
-| Check for updates | 自动检查更新 | 建议开启 |
-| Dark mode | 深色主题 | 个人偏好 |
-| Units (IEC) | 使用 KiB/MiB 而非 kB/MB | 个人偏好 |
+| Setting | Description | Recommendation |
+|---------|-------------|----------------|
+| Overwrite files | Securely overwrite file contents before deleting | Off for routine cleaning; on for sensitive data |
+| Check for updates | Automatically check for new versions | Recommended on |
+| Dark mode | Dark theme | Personal preference |
+| Units (IEC) | Use KiB/MiB instead of kB/MB | Personal preference |
 
 ---
 
-## 3. CLI 命令行使用
+## 3. CLI Usage
 
-CLI 模式不需要 GTK，可在无图形界面的服务器上使用。
+CLI mode does not require GTK and works on headless servers.
 
-### 基本语法
+### Basic Syntax
 
 ```
-python bleachbit.py [选项] 清理器.选项 [清理器.选项 ...]
+python bleachbit.py [options] cleaner.option [cleaner.option ...]
 ```
 
-### 核心命令
+### Core Commands
 
-#### 查看帮助
+#### Show help
 
 ```bash
 python bleachbit.py --help
 ```
 
-#### 列出所有可用清理器
+#### List all available cleaners
 
 ```bash
 python bleachbit.py --list-cleaners
 ```
 
-输出示例：
+Example output:
 ```
 firefox.cache
 firefox.cookies
@@ -220,102 +220,102 @@ system.tmp
 ...
 ```
 
-> 共约 260 个清理选项，覆盖 60+ 种软件。
+> About 260 cleaning options covering 60+ applications.
 
-#### 预览（不实际删除）
+#### Preview (dry run)
 
 ```bash
-# 预览 Firefox 缓存清理
+# Preview Firefox cache cleanup
 python bleachbit.py --preview firefox.cache
 
-# 预览多个清理项
+# Preview multiple items
 python bleachbit.py --preview firefox.cache system.tmp google_chrome.cache
 
-# 预览某软件的所有选项（使用通配符 *）
+# Preview all options for an application (wildcard)
 python bleachbit.py --preview firefox.*
 ```
 
-#### 执行清理
+#### Clean
 
 ```bash
-# 清理 Firefox 缓存和系统临时文件
+# Clean Firefox cache and system temp files
 python bleachbit.py --clean firefox.cache system.tmp
 
-# 清理某软件的全部选项
+# Clean all options for an application
 python bleachbit.py --clean firefox.*
 
-# 使用 GUI 中保存的预设
+# Use saved preset from the GUI
 python bleachbit.py --clean --preset
 
-# 清理所有无警告的选项
+# Clean all non-warning options
 python bleachbit.py --clean --all-but-warning
 
-# 清理所有但排除特定项
+# Clean all except specific items
 python bleachbit.py --clean --all-but-warning --except system.empty_space
 ```
 
-#### 安全粉碎文件
+#### Securely shred files
 
 ```bash
-# 安全粉碎指定文件（覆写内容 + 重命名 + 删除）
+# Securely shred specific files (overwrite + rename + delete)
 python bleachbit.py --shred secret.txt passwords.db
 
-# 粉碎整个文件夹
+# Shred an entire directory
 python bleachbit.py --shred C:\Users\me\old-secrets\
 ```
 
-#### 擦除磁盘空闲空间
+#### Wipe free disk space
 
 ```bash
-# 用零覆写磁盘空闲空间，防止已删除文件被恢复
+# Overwrite free disk space with zeros to prevent recovery of deleted files
 python bleachbit.py --wipe-empty-space C:\
 
 # Linux
 python bleachbit.py --wipe-empty-space /home
 ```
 
-> ⚠️ **此操作耗时很长**（取决于空闲空间大小），且会大量写入磁盘。SSD 用户谨慎使用。
+> **Warning:** This operation takes a long time (depends on free space) and writes heavily to disk. Use with caution on SSDs.
 
-#### 安全覆写模式
+#### Overwrite mode
 
 ```bash
-# 清理时覆写文件内容（而非简单删除）
+# Overwrite file contents during cleaning (instead of simple deletion)
 python bleachbit.py --clean --overwrite firefox.cache system.tmp
 ```
 
-#### 其他命令
+#### Other commands
 
 ```bash
-# 查看版本
+# Show version
 python bleachbit.py --version
 
-# 查看系统信息
+# Show system info
 python bleachbit.py --sysinfo
 
-# 开启调试日志
+# Enable debug logging
 python bleachbit.py --debug --clean system.tmp
 
-# 将调试日志写入文件
+# Write debug log to file
 python bleachbit.py --debug-log debug.txt --clean system.tmp
 ```
 
-### Windows 专用命令
+### Windows-specific commands
 
 ```bash
-# 更新 winapp2.ini（社区清理规则）
+# Update winapp2.ini (community cleaning rules)
 python bleachbit.py --update-winapp2
 
-# 不弹出 UAC 管理员权限提示
+# Skip the UAC admin prompt
 python bleachbit.py --no-uac --clean system.tmp
 ```
 
 ---
 
-## 4. 常用清理场景
+## 4. Common Cleaning Scenarios
 
-### 场景 1：快速释放磁盘空间
+### Scenario 1: Quick disk space recovery
 
-目标：清理所有浏览器缓存和系统临时文件。
+Goal: Clear all browser caches and system temp files.
 
 ```bash
 python bleachbit.py --clean ^
@@ -328,9 +328,9 @@ python bleachbit.py --clean ^
     system.logs
 ```
 
-### 场景 2：清除浏览痕迹（隐私保护）
+### Scenario 2: Clear browsing traces (privacy)
 
-目标：删除所有浏览器的历史记录、Cookies、表单数据。
+Goal: Remove history, cookies, and form data from all browsers.
 
 ```bash
 python bleachbit.py --clean --overwrite ^
@@ -339,9 +339,9 @@ python bleachbit.py --clean --overwrite ^
     microsoft_edge.cache microsoft_edge.cookies microsoft_edge.history microsoft_edge.form_history
 ```
 
-### 场景 3：清理开发环境
+### Scenario 3: Clean up development artifacts
 
-目标：清除 Python 缓存、Node.js 模块、编辑器临时文件。
+Goal: Remove Python caches, Node.js modules, editor temp files.
 
 ```bash
 python bleachbit.py --clean ^
@@ -352,60 +352,60 @@ python bleachbit.py --clean ^
     deepscan.thumbs_db
 ```
 
-> ⚠️ `deepscan` 清理器会深度扫描目录树，可能耗时较长。
+> **Note:** The `deepscan` cleaner performs a deep directory-tree scan and may take a while.
 
-### 场景 4：安全销毁文件
+### Scenario 4: Securely destroy files
 
 ```bash
-# 安全粉碎（覆写 + 重命名 + 删除）
+# Securely shred (overwrite + rename + delete)
 python bleachbit.py --shred "C:\Users\me\Documents\tax-2024.xlsx"
 ```
 
-### 场景 5：定期自动清理（Windows 任务计划）
+### Scenario 5: Scheduled automatic cleaning (Windows Task Scheduler)
 
-创建批处理文件 `daily_clean.bat`：
+Create a batch file `daily_clean.bat`:
 
 ```batch
 @echo off
 python bleachbit.py --clean --preset --no-uac
 ```
 
-然后在 Windows 任务计划程序中添加定时任务即可。
+Then add it as a scheduled task in Windows Task Scheduler.
 
 ---
 
-## 5. 安全擦除（Shred）
+## 5. Secure Shredding
 
-BleachBit 的安全擦除分三个层次：
+BleachBit provides three levels of secure deletion:
 
-| 层次 | 命令 | 说明 |
-|------|------|------|
-| 普通删除 | `--clean` | 仅删除文件（可被恢复工具还原） |
-| 覆写删除 | `--clean --overwrite` | 用零覆写文件内容后删除 |
-| 安全粉碎 | `--shred` | 覆写内容 → 随机重命名文件 → 删除 |
+| Level | Command | Description |
+|-------|---------|-------------|
+| Normal delete | `--clean` | Deletes files (recoverable with forensic tools) |
+| Overwrite delete | `--clean --overwrite` | Overwrites contents with zeros before deleting |
+| Secure shred | `--shred` | Overwrites contents, randomly renames, then deletes |
 
-### 擦除原理
+### How it works
 
-1. **内容覆写**（`wipe_contents`）：用全零 (`\x00`) 覆写文件全部内容
-2. **文件名擦除**（`wipe_name`）：将文件名随机重命名多次，消除文件名痕迹
-3. **空闲空间擦除**（`wipe-empty-space`）：用零填满磁盘空闲空间，覆盖已删除文件的残留数据
+1. **Content overwrite** (`wipe_contents`): Fills the entire file with null bytes (`\x00`)
+2. **Filename wipe** (`wipe_name`): Randomly renames the file multiple times to erase the original filename from the filesystem
+3. **Free space wipe** (`wipe-empty-space`): Fills free disk space with zeros to overwrite residual data from previously deleted files
 
-> 📝 根据 NIST SP 800-88 标准，现代存储介质只需一次覆写即可有效清除数据。
+> Per NIST SP 800-88, a single overwrite pass is sufficient to effectively sanitize modern storage media.
 
 ---
 
-## 6. 自定义清理规则（CleanerML）
+## 6. Custom Cleaning Rules (CleanerML)
 
-BleachBit 支持通过 XML 文件定义自定义清理规则。
+BleachBit supports custom cleaning rules defined via XML files.
 
-### 规则文件位置
+### Rule file locations
 
 - **Windows**: `%APPDATA%\BleachBit\cleaners\`
 - **Linux**: `~/.config/bleachbit/cleaners/`
 
-### 示例：清理自定义应用的缓存
+### Example: Clean a custom application's cache
 
-创建文件 `my_app.xml`：
+Create a file named `my_app.xml`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -431,50 +431,50 @@ BleachBit 支持通过 XML 文件定义自定义清理规则。
 </cleaner>
 ```
 
-保存后重启 BleachBit，新的清理器会出现在列表中。
+Save the file, restart BleachBit, and the new cleaner appears in the list.
 
-### CleanerML 常用动作
+### Common CleanerML actions
 
-| 动作 | 说明 |
-|------|------|
-| `delete` | 删除匹配的文件 |
-| `shred` | 安全粉碎匹配的文件 |
-| `truncate` | 截断文件为 0 字节（保留文件） |
-| `clean.ini` | 清理 INI 文件中的指定节 |
-| `clean.json` | 清理 JSON 文件中的指定键 |
-| `sqlite.vacuum` | 压缩 SQLite 数据库 |
-
----
-
-## 7. 最佳实践与注意事项
-
-### ✅ 推荐做法
-
-1. **先预览，再清理** — 使用 `--preview` 确认将删除的内容
-2. **关闭目标程序** — 清理浏览器数据前关闭浏览器，否则可能失败
-3. **备份重要数据** — 首次使用前备份，防止误删
-4. **按需使用 overwrite** — 普通清理不需要覆写，隐私敏感数据才需要
-5. **定期更新 winapp2.ini** — Windows 用户可获取社区贡献的更多清理规则
-
-### ⚠️ 注意事项
-
-1. **不要勾选不理解的选项** — 尤其是 `Passwords`、`Session` 等会影响登录状态
-2. **SSD 不需要擦除空闲空间** — SSD 有 TRIM 机制，`--wipe-empty-space` 会缩短 SSD 寿命
-3. **Cookies 清理会注销网站** — 清理 Cookies 后需要重新登录所有网站
-4. **`system.empty_space` 耗时长** — 此操作需要填满整个磁盘空闲空间，谨慎使用
-5. **管理员权限** — 某些系统清理项需要管理员权限才能访问
-
-### 支持的清理器分类
-
-| 分类 | 包含软件 |
-|------|---------|
-| 浏览器 | Firefox, Chrome, Edge, Brave, Opera, Vivaldi, Safari, Waterfox 等 |
-| 通讯 | Slack, Discord, Skype, Thunderbird, Pidgin 等 |
-| 办公 | LibreOffice, Microsoft Office, Adobe Reader 等 |
-| 媒体 | VLC, WinAmp, Zoom 等 |
-| 开发 | DeepScan (Python cache, node_modules, .venv 等) |
-| 系统 | 临时文件, 日志, 回收站, 剪贴板, MRU, 缩略图缓存 等 |
+| Action | Description |
+|--------|-------------|
+| `delete` | Delete matching files |
+| `shred` | Securely shred matching files |
+| `truncate` | Truncate files to 0 bytes (preserves the file) |
+| `clean.ini` | Remove specified sections from INI files |
+| `clean.json` | Remove specified keys from JSON files |
+| `sqlite.vacuum` | Compact a SQLite database |
 
 ---
 
-*本教程基于 BleachBit v6.0.1。更多信息请访问 https://www.bleachbit.org/documentation*
+## 7. Best Practices and Caveats
+
+### Recommended practices
+
+1. **Always preview before cleaning** — Use `--preview` to verify what will be deleted
+2. **Close target applications** — Close browsers before cleaning their data, otherwise it may fail
+3. **Back up important data** — Make a backup before your first run, just in case
+4. **Use overwrite selectively** — Routine cleaning does not need overwrite; reserve it for sensitive data
+5. **Keep winapp2.ini updated** — Windows users can get additional community-contributed cleaning rules
+
+### Caveats
+
+1. **Do not check options you do not understand** — Especially `Passwords`, `Session`, etc., which affect login state
+2. **SSDs do not need free-space wiping** — SSDs have TRIM; `--wipe-empty-space` reduces SSD lifespan with no benefit
+3. **Clearing cookies logs you out** — After cleaning cookies, you must re-login to all websites
+4. **`system.empty_space` takes a long time** — This operation fills the entire free disk space; use with care
+5. **Admin privileges** — Some system cleaning options require administrator access
+
+### Supported cleaner categories
+
+| Category | Applications |
+|----------|-------------|
+| Browsers | Firefox, Chrome, Edge, Brave, Opera, Vivaldi, Safari, Waterfox, etc. |
+| Communication | Slack, Discord, Skype, Thunderbird, Pidgin, etc. |
+| Office | LibreOffice, Microsoft Office, Adobe Reader, etc. |
+| Media | VLC, WinAmp, Zoom, etc. |
+| Development | DeepScan (Python cache, node_modules, .venv, etc.) |
+| System | Temp files, logs, recycle bin, clipboard, MRU, thumbnail cache, etc. |
+
+---
+
+*This tutorial is based on BleachBit v6.0.1. For more information visit https://www.bleachbit.org/documentation*
