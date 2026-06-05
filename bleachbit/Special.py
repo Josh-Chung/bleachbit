@@ -474,7 +474,8 @@ def delete_ooo_history(path):
                 changed = True
                 break
     if changed:
-        dom1.writexml(open(path, "w", encoding='utf-8'))
+        with open(path, "w", encoding='utf-8') as xml_file:
+            dom1.writexml(xml_file)
 
 
 def get_chrome_bookmark_ids(history_path):
