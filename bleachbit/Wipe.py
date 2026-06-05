@@ -12,7 +12,7 @@ import atexit
 import ctypes
 import errno
 import os
-import random
+import secrets
 import string
 import struct
 import tempfile
@@ -34,8 +34,8 @@ logger = logging.getLogger(__name__)
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
-                   for i in range(length))
+    alphabet = string.ascii_letters + '0123456789_.-'
+    return ''.join(secrets.choice(alphabet) for i in range(length))
 
 
 def detect_orphaned_wipe_files():
@@ -237,7 +237,7 @@ def wipe_name(pathname1):
             pathname3 = os.path.join(head, __random_string(i + 1))
             os.rename(pathname2, pathname3)
             break
-        except:
+        except OSError:
             i += 1
             if i > 100:
                 logger.info('exhausted short rename: %s', pathname2)

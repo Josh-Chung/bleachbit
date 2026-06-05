@@ -28,7 +28,7 @@ import json
 import logging
 import os
 import sqlite3
-import xml.dom.minidom
+import defusedxml.minidom
 from urllib.parse import quote, urlparse, urlunparse
 
 
@@ -186,7 +186,8 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            safe_path = path_history.replace('"', '""')
+            cmds += f'attach database "{safe_path}" as History;'
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
@@ -211,7 +212,8 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            safe_path = path_history.replace('"', '""')
+            cmds += f'attach database "{safe_path}" as History;'
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
@@ -278,7 +280,7 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
-    dom1 = xml.dom.minidom.parse(path)
+    dom1 = defusedxml.minidom.parse(path)
     modified = False
     pathprefix = '/org.openoffice.Office.Histories/Histories/'
     for node in dom1.getElementsByTagName("item"):
@@ -391,7 +393,8 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += f'attach database "{places_path}" as places;'
+    safe_places_path = places_path.replace('"', '""')
+    cmds += f'attach database "{safe_places_path}" as places;'
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
                              "(select distinct fk from {db}moz_bookmarks "
@@ -461,7 +464,7 @@ def delete_mozilla_favicons(path):
 
 def delete_ooo_history(path):
     """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
-    dom1 = xml.dom.minidom.parse(path)
+    dom1 = defusedxml.minidom.parse(path)
     changed = False
     for node in dom1.getElementsByTagName("node"):
         if node.hasAttribute("oor:name"):
@@ -471,7 +474,8 @@ def delete_ooo_history(path):
                 changed = True
                 break
     if changed:
-        dom1.writexml(open(path, "w", encoding='utf-8'))
+        with open(path, "w", encoding='utf-8') as xml_file:
+            dom1.writexml(xml_file)
 
 
 def get_chrome_bookmark_ids(history_path):

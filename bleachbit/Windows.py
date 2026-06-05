@@ -42,7 +42,7 @@ import sys
 import threading
 import time
 import uuid
-import xml.dom.minidom
+import defusedxml.minidom
 from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
@@ -1186,7 +1186,7 @@ def symlink_or_copy(src, dst):
 
 
 def has_fontconfig_cache(font_conf_file):
-    dom = xml.dom.minidom.parse(font_conf_file)
+    dom = defusedxml.minidom.parse(font_conf_file)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
     cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')

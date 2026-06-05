@@ -43,8 +43,7 @@ def normalized_walk(top, **kwargs):
     """
     try:
         from scandir import walk
-    except:
-        # there is a warning in FileUtilities, so don't warn again here
+    except ImportError:
         from os import walk
     if 'Darwin' == platform.system():
         for dirpath, dirnames, filenames in walk(top, **kwargs):

@@ -2,6 +2,7 @@
 # requests 2.32.5 throws warning with chardet >= 6.0.0
 # https://github.com/psf/requests/issues/7219#issuecomment-3956177087
 chardet==5.2.0
+defusedxml>=0.7.1
 psutil
 requests>=2.32.5
 setuptools
