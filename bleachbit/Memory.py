@@ -122,7 +122,7 @@ def make_self_oom_target_linux():
             drop_msg = _("Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
             logger.debug(drop_msg, {'pid': os.getpid(), 'uid': uid})
             os.seteuid(uid)
-    except:
+    except Exception:
         logger.exception('Error when dropping privileges')
 
 
