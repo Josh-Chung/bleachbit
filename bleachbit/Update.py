@@ -27,7 +27,7 @@ import hashlib
 import logging
 import os
 import sys
-import xml.dom.minidom
+import defusedxml.minidom
 
 # local
 import bleachbit
@@ -111,7 +111,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
             logger.debug(e.response.headers)
         return ()
     try:
-        dom = xml.dom.minidom.parseString(response.text)
+        dom = defusedxml.minidom.parseString(response.text)
     except:
         logger.exception(
             'The update information does not parse: %s', response.text)
