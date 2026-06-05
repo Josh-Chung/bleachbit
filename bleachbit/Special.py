@@ -186,7 +186,8 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            safe_path = path_history.replace('"', '""')
+            cmds += f'attach database "{safe_path}" as History;'
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
@@ -211,7 +212,8 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            safe_path = path_history.replace('"', '""')
+            cmds += f'attach database "{safe_path}" as History;'
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
@@ -391,7 +393,8 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += f'attach database "{places_path}" as places;'
+    safe_places_path = places_path.replace('"', '""')
+    cmds += f'attach database "{safe_places_path}" as places;'
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
                              "(select distinct fk from {db}moz_bookmarks "
